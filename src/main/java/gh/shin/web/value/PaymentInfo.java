@@ -8,7 +8,6 @@ import java.util.Objects;
 
 public final class PaymentInfo implements Serializable {
     private static final long serialVersionUID = -7722974456683772876L;
-    private final Long accountId;
     private final Integer age;
     private final String region;
     private final String residence;
@@ -20,7 +19,6 @@ public final class PaymentInfo implements Serializable {
         AccountEnt accountEnt = paymentEnt.getAccount();
         if (accountEnt == null)
             throw new RuntimeException("Account data is null");
-        this.accountId = accountEnt.getAccountId();
         this.age = accountEnt.getAge();
         this.residence = accountEnt.getResidence();
         this.region = paymentEnt.getRegion();
@@ -29,9 +27,6 @@ public final class PaymentInfo implements Serializable {
         this.methodType = paymentEnt.getMethodType();
     }
 
-    public Long getAccountId() {
-        return accountId;
-    }
 
     public Integer getAge() {
         return age;
@@ -62,8 +57,7 @@ public final class PaymentInfo implements Serializable {
         if (this == o) return true;
         if (!(o instanceof PaymentInfo)) return false;
         PaymentInfo that = (PaymentInfo) o;
-        return Objects.equals(accountId, that.accountId) &&
-            Objects.equals(age, that.age) &&
+        return Objects.equals(age, that.age) &&
             Objects.equals(region, that.region) &&
             Objects.equals(residence, that.residence) &&
             Objects.equals(amount, that.amount);
@@ -71,14 +65,13 @@ public final class PaymentInfo implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(accountId, age, region, residence, amount);
+        return Objects.hash(age, region, residence, amount);
     }
 
     @Override
     public String toString() {
         return "PaymentInfo{" +
-            "accountId=" + accountId +
-            ", age=" + age +
+            "age=" + age +
             ", region='" + region + '\'' +
             ", residence='" + residence + '\'' +
             ", amount=" + amount +
