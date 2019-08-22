@@ -23,24 +23,48 @@ public class PaymentRequest implements Serializable {
         return paymentId;
     }
 
+    public void setPaymentId(final Long paymentId) {
+        this.paymentId = paymentId;
+    }
+
     public Long getAccountId() {
         return accountId;
+    }
+
+    public void setAccountId(final Long accountId) {
+        this.accountId = accountId;
     }
 
     public Integer getAmount() {
         return amount;
     }
 
+    public void setAmount(final Integer amount) {
+        this.amount = amount;
+    }
+
     public String getMethodType() {
         return methodType;
+    }
+
+    public void setMethodType(final String methodType) {
+        this.methodType = methodType;
     }
 
     public String getItemCategory() {
         return itemCategory;
     }
 
+    public void setItemCategory(final String itemCategory) {
+        this.itemCategory = itemCategory;
+    }
+
     public String getRegion() {
         return region;
+    }
+
+    public void setRegion(final String region) {
+        this.region = region;
     }
 
     @Override
