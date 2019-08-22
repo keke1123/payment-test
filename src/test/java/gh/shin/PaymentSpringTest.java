@@ -24,7 +24,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
-import redis.embedded.RedisServer;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -39,7 +38,6 @@ import static org.junit.Assert.assertTrue;
 @FixMethodOrder(value = MethodSorters.NAME_ASCENDING)
 @WebAppConfiguration
 public class PaymentSpringTest {
-    private static RedisServer redisServer;
     private Logger log = LoggerFactory.getLogger(PaymentSpringTest.class);
     @Autowired
     private PaymentService paymentService;
@@ -47,19 +45,8 @@ public class PaymentSpringTest {
     private PaymentRepo paymentRepo;
     @Autowired
     private PaymentSummaryService paymentSummaryService;
-    //    private static JedisPool JEDIS_POOL;
     @Autowired
     private PaymentSummaryRepo paymentSummaryRepo;
-
-    @BeforeClass
-    public static void beforeClass() throws IOException {
-//        redisServer = new RedisServer(6379);
-    }
-
-    @AfterClass
-    public static void afterClass() {
-//        redisServer.stop();
-    }
 
     @Test(expected = CreationFailedException.class)
     public void _1_payment_01_PaymentService_fail_validation_empty() {
