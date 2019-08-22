@@ -24,7 +24,7 @@ public final class GroupPolicy {
         return filter;
     }
 
-    public boolean filter(PaymentInfo paymentInfo) {
+    boolean filter(PaymentInfo paymentInfo) {
         return this.filter.filter(paymentInfo);
     }
 
@@ -39,5 +39,13 @@ public final class GroupPolicy {
     @Override
     public int hashCode() {
         return Objects.hash(groupId);
+    }
+
+    @Override
+    public String toString() {
+        return "GroupPolicy{" +
+            "groupId='" + groupId + '\'' +
+            ", filter=" + filter +
+            '}';
     }
 }

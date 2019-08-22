@@ -37,4 +37,8 @@ public class GroupPolicyFactory {
     public List<String> getGroupIds() {
         return policies.stream().map(GroupPolicy::getGroupId).collect(Collectors.toList());
     }
+
+    public int size(){
+        return this.policies.size();
+    }
 }
