@@ -16,12 +16,12 @@ public class PaymentRequestValidator {
     }
 
     public static ValidationResult validate(PaymentRequest request) {
-        if (!request.getMethodType().equals(CARD) || !request.getMethodType().equals(CASH)) {
+        if (!request.getMethodType().equals(CARD) && !request.getMethodType().equals(CASH)) {
             return new ValidationResult(false, request.getMethodType() + " method type is invalid.");
         }
-        if(!request.getItemCategory().equals(FOODS) || !request.getItemCategory().equals(BEAUTY)
-        || !request.getItemCategory().equals(SPORTS) || !request.getItemCategory().equals(BOOKS)
-        || !request.getItemCategory().equals(FASHION)){
+        if(!request.getItemCategory().equals(FOODS) && !request.getItemCategory().equals(BEAUTY)
+            && !request.getItemCategory().equals(SPORTS) && !request.getItemCategory().equals(BOOKS)
+            && !request.getItemCategory().equals(FASHION)){
             return new ValidationResult(false, request.getItemCategory() + " item category is invalid.");
         }
         if (!LOCATIONS.contains(request.getRegion())) {
