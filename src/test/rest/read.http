@@ -1,0 +1,23 @@
+### 404
+GET http://localhost:8080/sdlkfj/sdfk;lfjsls;jf
+
+### with no parameter
+GET http://localhost:8080/statistics
+
+### with no found
+GET http://localhost:8080/statistics?groupId=12345
+
+### success
+GET http://localhost:8080/statistics?groupId=GROUP_1
+
+### success 2
+GET http://localhost:8080/statistics?groupId=GROUP_2
+
+### success 3
+GET http://localhost:8080/statistics?groupId=GROUP_3
+
+### success 4
+GET http://localhost:8080/statistics?groupId=GROUP_4
+
+###
+

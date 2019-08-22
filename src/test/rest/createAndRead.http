@@ -1,0 +1,18 @@
+### get GROUP_1 (10000 미만 카드)
+GET http://localhost:8080/statistics?groupId=GROUP_1
+
+### 10000 미만 카드 (GROUP_1 발생)
+POST http://localhost:8080/payment
+Content-Type: application/json
+
+{
+  "paymentId": 100,
+  "accountId": 1,
+  "amount": 55,
+  "methodType": "카드",
+  "itemCategory": "패션",
+  "region": "서울"
+}
+
+### get GROUP_1 (10000 미만 카드)
+GET http://localhost:8080/statistics?groupId=GROUP_1

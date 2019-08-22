@@ -1,0 +1,107 @@
+### payment with no-req
+POST http://localhost:8080/payment
+
+
+### payment with illagel data type
+POST http://localhost:8080/payment
+Content-Type: application/json
+
+{
+"paymentId": "sdfsdf",
+"accountId": "651",
+"amount": "111",
+"methodType": "method",
+"itemCategory": "item",
+"region": "서울"
+}
+
+### payment with illegal content-type
+POST http://localhost:8080/payment
+Content-Type: text/html
+
+{
+"paymentId": 123,
+"accountId": 651,
+"amount": 111,
+"methodType": "method",
+"itemCategory": "item",
+"region": "서울"
+}
+
+### payment with invalid account id
+POST http://localhost:8080/payment
+Content-Type: application/json
+
+{
+  "paymentId": 100,
+  "accountId": 651,
+  "amount": 111,
+  "methodType": "method",
+  "itemCategory": "item",
+  "region": "서울"
+}
+
+### payment with invalid payment id (already exist)
+POST http://localhost:8080/payment
+Content-Type: application/json
+
+{
+  "paymentId": 1,
+  "accountId": 651,
+  "amount": 111,
+  "methodType": "method",
+  "itemCategory": "item",
+  "region": "서울"
+}
+
+### payment with invalid method type
+POST http://localhost:8080/payment
+Content-Type: application/json
+
+{
+  "paymentId": 100,
+  "accountId": 1,
+  "amount": 111,
+  "methodType": "method",
+  "itemCategory": "item",
+  "region": "서울"
+}
+
+### payment with invalid item category
+POST http://localhost:8080/payment
+Content-Type: application/json
+
+{
+  "paymentId": 100,
+  "accountId": 1,
+  "amount": 111,
+  "methodType": "카드",
+  "itemCategory": "item",
+  "region": "서울"
+}
+
+### payment with invalid region
+POST http://localhost:8080/payment
+Content-Type: application/json
+
+{
+  "paymentId": 100,
+  "accountId": 1,
+  "amount": 111,
+  "methodType": "카드",
+  "itemCategory": "패션",
+  "region": "sdfsdfsdf"
+}
+
+### payment with right request
+POST http://localhost:8080/payment
+Content-Type: application/json
+
+{
+  "paymentId": 100,
+  "accountId": 1,
+  "amount": 55,
+  "methodType": "카드",
+  "itemCategory": "패션",
+  "region": "서울"
+}
