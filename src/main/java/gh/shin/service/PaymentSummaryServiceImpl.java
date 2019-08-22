@@ -4,15 +4,16 @@ import gh.shin.entity.PaymentEnt;
 import gh.shin.entity.PaymentSummary;
 import gh.shin.entity.repo.PaymentSummaryRepo;
 import gh.shin.group.GroupPolicyFactory;
-import gh.shin.util.NoDataFoundException;
 import gh.shin.web.value.PaymentInfo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 public class PaymentSummaryServiceImpl implements PaymentSummaryService {
@@ -26,26 +27,28 @@ public class PaymentSummaryServiceImpl implements PaymentSummaryService {
     }
 
     @Override
-    public PaymentSummary findByGroupId(final String groupId) {
-        return paymentSummaryRepo.findById(groupId).orElseThrow(() -> new NoDataFoundException("Group: '" + groupId + "' is not found."));
+    @CachePut(value = "summary", key = "#groupId")
+    public Optional<PaymentSummary> findByGroupId(final String groupId) {
+        return paymentSummaryRepo.findById(groupId);
     }
 
     @Async
     @Override
+    @CacheEvict(value = "summary", key = "#paymentSummary.groupId")
     @Transactional
-    public void create(PaymentSummary summary) {
-        paymentSummaryRepo.save(summary);
+    public Optional<PaymentSummary> save(final PaymentSummary paymentSummary) {
+        return Optional.of(paymentSummaryRepo.save(paymentSummary));
     }
 
+
     @Override
-    @Cacheable(value = "summary", key = "#groupId")
     public PaymentSummary calculateSummary(final PaymentEnt paymentEnt) {
         PaymentInfo paymentInfo = new PaymentInfo(paymentEnt);
         LocalDateTime now = LocalDateTime.now();
         String groupId = groupPolicyFactory.getGroupIdByPaymentInfo(paymentInfo);
-        PaymentSummary paymentSummary = paymentSummaryRepo.findById(groupId).orElse(new PaymentSummary(groupId, now));
+        PaymentSummary paymentSummary = findByGroupId(groupId).orElse(new PaymentSummary(groupId, now));
         paymentSummary.calculate(paymentInfo);
-        create(paymentSummary);
+        save(paymentSummary);
         return paymentSummary;
     }
 
