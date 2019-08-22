@@ -4,7 +4,7 @@ import gh.shin.entity.AccountEnt;
 import gh.shin.entity.PaymentEnt;
 import gh.shin.entity.repo.AccountRepo;
 import gh.shin.entity.repo.PaymentRepo;
-import gh.shin.util.CreateFailException;
+import gh.shin.util.CreationFailedException;
 import gh.shin.util.PaymentRequestValidator;
 import gh.shin.util.PaymentRequestValidator.ValidationResult;
 import gh.shin.web.value.PaymentRequest;
@@ -35,11 +35,11 @@ public class PaymentServiceImpl implements PaymentService{
         if (validationResult.isValid()) {
             Long accId = request.getAccountId();
             AccountEnt account = accountRepo.findById(accId)
-                .orElseThrow(() -> new CreateFailException("Account " + accId + " is not found"));
+                .orElseThrow(() -> new CreationFailedException("Account " + accId + " is not found"));
 
             Long payId = request.getPaymentId();
             paymentRepo.findById(payId).ifPresent((o) -> {
-                throw new CreateFailException("Payment " + payId + " is already exists.");
+                throw new CreationFailedException("Payment " + payId + " is already exists.");
             });
 
             PaymentEnt paymentEnt = new PaymentEnt();
@@ -53,7 +53,7 @@ public class PaymentServiceImpl implements PaymentService{
             paymentSummaryService.calculateSummary(paymentEnt);
             result = true;
         } else {
-            throw new CreateFailException(validationResult.getMsg());
+            throw new CreationFailedException(validationResult.getMsg());
         }
         return result;
     }
