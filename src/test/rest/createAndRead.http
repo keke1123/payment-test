@@ -6,7 +6,7 @@ POST http://localhost:8080/payment
 Content-Type: application/json
 
 {
-  "paymentId": 100,
+  "paymentId": -1,
   "accountId": 1,
   "amount": 55,
   "methodType": "카드",
@@ -16,3 +16,5 @@ Content-Type: application/json
 
 ### get GROUP_1 (10000 미만 카드)
 GET http://localhost:8080/statistics?groupId=GROUP_1
+
+###
