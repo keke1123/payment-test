@@ -73,9 +73,9 @@ public class PaymentApp {
     @Value("classpath:csv/payments.csv")
     private Resource paymentResource;
     @Autowired
-    public PaymentApp(final DispatcherServlet dispatcherServlet, final AccountRepo accountRepo, final PaymentRepo paymentRepo, final PaymentSummaryRepo paymentSummaryRepo, final EntityManagerFactory entityManagerFactory) {
+    public PaymentApp(final DispatcherServlet dispatcherServlet, final AccountRepo accountRepo, final PaymentRepo paymentRepo
+        , final PaymentSummaryRepo paymentSummaryRepo, final EntityManagerFactory entityManagerFactory) {
         this.dispatcherServlet = dispatcherServlet;
-//        dispatcherServlet.setThrowExceptionIfNoHandlerFound(true);
         this.accountRepo = accountRepo;
         this.paymentRepo = paymentRepo;
         this.paymentSummaryRepo = paymentSummaryRepo;
