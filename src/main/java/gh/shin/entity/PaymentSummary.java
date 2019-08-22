@@ -16,7 +16,7 @@ public class PaymentSummary implements Serializable {
     private Long count = 0L;
     private Long totalAmount = 0L;
     private Integer avgAmount = 0;
-    private Integer minAmount = 0;
+    private Integer minAmount = Integer.MAX_VALUE;
     private Integer maxAmount = 0;
     @JsonIgnore
     private LocalDateTime createdTime;
@@ -102,5 +102,6 @@ public class PaymentSummary implements Serializable {
         if (this.maxAmount < info.getAmount()) {
             this.maxAmount = info.getAmount();
         }
+        this.avgAmount = Math.toIntExact(this.totalAmount / this.count);
     }
 }
