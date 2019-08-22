@@ -39,7 +39,7 @@ public class PaymentServiceImpl implements PaymentService{
 
             Long payId = request.getPaymentId();
             paymentRepo.findById(payId).ifPresent((o) -> {
-                throw new CreateFailException("Payment " + accId + " is already exists.");
+                throw new CreateFailException("Payment " + payId + " is already exists.");
             });
 
             PaymentEnt paymentEnt = new PaymentEnt();
