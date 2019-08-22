@@ -2,6 +2,7 @@ package gh.shin.web.controller;
 
 import gh.shin.entity.PaymentSummary;
 import gh.shin.service.PaymentSummaryServiceImpl;
+import gh.shin.util.NoDataFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +24,6 @@ public class StatisticsController {
     @GetMapping("/statistics")
     public PaymentSummary readByGroupId(@RequestParam(name = "groupId", required = true) String groupId) {
         log.info("request received: {}", groupId);
-        return paymentSummaryService.findByGroupId(groupId);
+        return paymentSummaryService.findByGroupId(groupId).orElseThrow(() -> new NoDataFoundException("Group: '" + groupId + "' is not found."));
     }
-
-
 }
