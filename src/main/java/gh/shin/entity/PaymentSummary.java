@@ -93,15 +93,5 @@ public class PaymentSummary implements Serializable {
         this.createdTime = createdTime;
     }
 
-    public synchronized void calculate(PaymentInfo info) {
-        this.count++;
-        this.totalAmount += info.getAmount();
-        if (this.minAmount > info.getAmount()) {
-            this.minAmount = info.getAmount();
-        }
-        if (this.maxAmount < info.getAmount()) {
-            this.maxAmount = info.getAmount();
-        }
-        this.avgAmount = Math.toIntExact(this.totalAmount / this.count);
-    }
+
 }
