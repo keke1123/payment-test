@@ -10,7 +10,10 @@ public final class GroupPolicy {
 
     public GroupPolicy(String groupId, GroupFilter filter) {
         if (groupId == null || groupId.length() < 1) {
-            throw new RuntimeException("Group Id must not be empty.");
+            throw new NullPointerException("Group Id must not be empty.");
+        }
+        if (filter == null) {
+            throw new NullPointerException("Group Filter must not be null.");
         }
         this.groupId = groupId;
         this.filter = filter;
