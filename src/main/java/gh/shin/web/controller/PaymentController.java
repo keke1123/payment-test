@@ -22,7 +22,7 @@ public class PaymentController {
         this.paymentService = paymentService;
     }
 
-    @PostMapping("/payment")
+    @PostMapping(value = "/payment", consumes = "application/json", produces = "application/json")
     public WebResponse createPayment(@Valid @RequestBody PaymentRequest request) {
         log.info("request received: {}", request);
         paymentService.create(request);

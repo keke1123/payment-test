@@ -21,7 +21,7 @@ public class StatisticsController {
         this.paymentSummaryService = paymentSummaryService;
     }
 
-    @GetMapping("/statistics")
+    @GetMapping(value = "/statistics", produces = "application/json")
     public PaymentSummary readByGroupId(@RequestParam(name = "groupId", required = true) String groupId) {
         log.info("request received: {}", groupId);
         return paymentSummaryService.findByGroupId(groupId).orElseThrow(() -> new NoDataFoundException("Group: '" + groupId + "' is not found."));
