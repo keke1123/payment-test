@@ -1,12 +1,13 @@
 package gh.shin.group;
 
 
+import com.google.common.collect.Lists;
 import gh.shin.web.value.PaymentInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -16,7 +17,26 @@ public class GroupPolicyFactory {
     private final Set<GroupPolicy> policies = new HashSet<>();
 
     public void addPolicies(GroupPolicy... policies) {
-        this.policies.addAll(Arrays.asList(policies));
+        List<GroupPolicy> policyList = Lists.newArrayList(policies);
+
+        Iterator<GroupPolicy> argPolicyItr = policyList.iterator();
+        while (argPolicyItr.hasNext()) {
+            GroupPolicy argPolicy = argPolicyItr.next();
+            if (argPolicy != null) {
+                boolean duplicated = false;
+                for (GroupPolicy policy : this.policies) {
+                    if (argPolicy.getGroupId().equals(policy.getGroupId())) {
+                        log.warn("{} groupId already registered. {} will be ignored.", argPolicy.getGroupId(), argPolicy);
+                        argPolicyItr.remove();
+                        duplicated = true;
+                        break;
+                    }
+                }
+                if (!duplicated) {
+                    this.policies.add(argPolicy);
+                }
+            }
+        }
     }
 
     public String getGroupIdByPaymentInfo(PaymentInfo paymentInfo) {
@@ -38,7 +58,7 @@ public class GroupPolicyFactory {
         return policies.stream().map(GroupPolicy::getGroupId).collect(Collectors.toList());
     }
 
-    public int size(){
+    public int size() {
         return this.policies.size();
     }
 }
