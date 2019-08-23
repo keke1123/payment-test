@@ -7,6 +7,7 @@
     <groupId>gh.shin</groupId>
     <artifactId>payment-test</artifactId>
     <version>1.0</version>
+    <packaging>jar</packaging>
 
     <name>payment</name>
     <!-- FIXME change it to the project's website -->
@@ -29,13 +30,18 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>org.hibernate.validator</groupId>
             <artifactId>hibernate-validator</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.apache.tomcat.embed</groupId>
-            <artifactId>tomcat-embed-el</artifactId>
-        </dependency>
+        <!--        <dependency>-->
+        <!--            <groupId>org.apache.tomcat.embed</groupId>-->
+        <!--            <artifactId>tomcat-embed-el</artifactId>-->
+        <!--        </dependency>-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -82,6 +88,11 @@
         <resources>
             <resource>
                 <directory>src/resources</directory>
+                <excludes>
+                    <exclude>
+                        *.properties
+                    </exclude>
+                </excludes>
             </resource>
         </resources>
         <plugins>
