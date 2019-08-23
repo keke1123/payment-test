@@ -17,7 +17,7 @@ public class StatisticsController {
     private final PaymentSummaryServiceImpl paymentSummaryService;
 
     @Autowired
-    public StatisticsController(PaymentSummaryServiceImpl paymentSummaryService){
+    public StatisticsController(PaymentSummaryServiceImpl paymentSummaryService) {
         this.paymentSummaryService = paymentSummaryService;
     }
 

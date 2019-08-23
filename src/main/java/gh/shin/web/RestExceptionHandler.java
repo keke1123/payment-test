@@ -55,7 +55,7 @@ public class RestExceptionHandler extends ExceptionHandlerExceptionResolver {
         return _makeError(HttpStatus.BAD_REQUEST, req.getRequestURL(), ex);
     }
 
-    private WebResponse _makeError(HttpStatus status, StringBuffer url, Exception ex){
+    private WebResponse _makeError(HttpStatus status, StringBuffer url, Exception ex) {
         log.error("Error {} from {}", status, url, ex);
         return WebResponse.error(ex.getMessage());
     }
