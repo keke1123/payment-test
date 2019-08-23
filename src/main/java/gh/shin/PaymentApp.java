@@ -1,6 +1,10 @@
 package gh.shin;
 
 import com.google.common.collect.Maps;
+import gh.shin.Constants.Category;
+import gh.shin.Constants.Group;
+import gh.shin.Constants.Location;
+import gh.shin.Constants.PaymentMethod;
 import gh.shin.entity.AccountEnt;
 import gh.shin.entity.PaymentEnt;
 import gh.shin.entity.PaymentSummary;
@@ -9,6 +13,7 @@ import gh.shin.entity.repo.PaymentRepo;
 import gh.shin.entity.repo.PaymentSummaryRepo;
 import gh.shin.group.GroupPolicy;
 import gh.shin.group.GroupPolicyFactory;
+import gh.shin.util.PaymentSummaryUtil;
 import gh.shin.web.value.PaymentInfo;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
@@ -19,15 +24,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.core.io.Resource;
-import org.springframework.data.redis.connection.RedisPassword;
-import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
-import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.DispatcherServlet;
@@ -57,7 +57,6 @@ import static gh.shin.Constants.PaymentMethod.CASH;
 @SpringBootApplication
 @EnableTransactionManagement
 @EnableWebMvc
-@EnableCaching
 @EnableAsync
 public class PaymentApp {
     private static final Logger log = LoggerFactory.getLogger(PaymentApp.class);
@@ -72,6 +71,7 @@ public class PaymentApp {
     private Resource accountResource;
     @Value("classpath:csv/payments.csv")
     private Resource paymentResource;
+
     @Autowired
     public PaymentApp(final DispatcherServlet dispatcherServlet, final AccountRepo accountRepo, final PaymentRepo paymentRepo
         , final PaymentSummaryRepo paymentSummaryRepo, final EntityManagerFactory entityManagerFactory) {
@@ -83,7 +83,7 @@ public class PaymentApp {
     }
 
     public static void main(String[] args) {
-        if(System.getProperty("file.encoding") == null || !System.getProperty("file.encoding").equalsIgnoreCase("utf-8")){
+        if (System.getProperty("file.encoding") == null || !System.getProperty("file.encoding").equalsIgnoreCase("utf-8")) {
             throw new RuntimeException("please set '-Dfile.encoding=UTF-8' on java before run for multilingual service.");
         }
         SpringApplication.run(PaymentApp.class, args);
@@ -97,10 +97,10 @@ public class PaymentApp {
      * GROUP_4 : 1,100,000원 이상 카드 || 1,000,00 이상 송금
      *
      * @return GroupPolicyFactory
-     * @see Constants.Location
-     * @see Constants.PaymentMethod
-     * @see Constants.Category
-     * @see Constants.Group
+     * @see Location
+     * @see PaymentMethod
+     * @see Category
+     * @see Group
      */
     @Bean
     GroupPolicyFactory groupPolicyFactory() {
@@ -159,7 +159,7 @@ public class PaymentApp {
             //group id에 해당이 없는 사람들은 저장하지 않아도 되므로 pass
             if (groupId.length() > 0) {
                 PaymentSummary paymentSummary = groupIdWithSummary.get(groupId);
-                paymentSummary.calculate(paymentInfo);
+                PaymentSummaryUtil.calculate(paymentInfo, paymentSummary);
             }
         }
         groupIdWithSummary.values().forEach(entityManager::persist);
