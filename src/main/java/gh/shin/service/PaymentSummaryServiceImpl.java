@@ -4,16 +4,17 @@ import gh.shin.entity.PaymentEnt;
 import gh.shin.entity.PaymentSummary;
 import gh.shin.entity.repo.PaymentSummaryRepo;
 import gh.shin.group.GroupPolicyFactory;
+import gh.shin.util.PaymentSummaryUtil;
 import gh.shin.web.value.PaymentInfo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.concurrent.Future;
 
 @Service
 public class PaymentSummaryServiceImpl implements PaymentSummaryService {
@@ -27,17 +28,15 @@ public class PaymentSummaryServiceImpl implements PaymentSummaryService {
     }
 
     @Override
-    @CachePut(value = "summary", key = "#groupId")
     public Optional<PaymentSummary> findByGroupId(final String groupId) {
         return paymentSummaryRepo.findById(groupId);
     }
 
     @Async
     @Override
-    @CacheEvict(value = "summary", key = "#paymentSummary.groupId")
     @Transactional
-    public Optional<PaymentSummary> save(final PaymentSummary paymentSummary) {
-        return Optional.of(paymentSummaryRepo.save(paymentSummary));
+    public Future<PaymentSummary> save(final PaymentSummary paymentSummary) {
+        return new AsyncResult<>(paymentSummaryRepo.save(paymentSummary));
     }
 
 
@@ -46,8 +45,7 @@ public class PaymentSummaryServiceImpl implements PaymentSummaryService {
         PaymentInfo paymentInfo = new PaymentInfo(paymentEnt);
         LocalDateTime now = LocalDateTime.now();
         String groupId = groupPolicyFactory.getGroupIdByPaymentInfo(paymentInfo);
-        PaymentSummary paymentSummary = findByGroupId(groupId).orElse(new PaymentSummary(groupId, now));
-        paymentSummary.calculate(paymentInfo);
+        PaymentSummary paymentSummary = PaymentSummaryUtil.calculate(paymentInfo, findByGroupId(groupId).orElse(new PaymentSummary(groupId, now)));
         save(paymentSummary);
         return paymentSummary;
     }
