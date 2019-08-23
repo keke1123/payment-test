@@ -7,12 +7,12 @@ POST http://localhost:8080/payment
 Content-Type: application/json
 
 {
-"paymentId": "sdfsdf",
-"accountId": "651",
-"amount": "111",
-"methodType": "method",
-"itemCategory": "item",
-"region": "서울"
+  "paymentId": "sdfsdf",
+  "accountId": "651",
+  "amount": "111",
+  "methodType": "method",
+  "itemCategory": "item",
+  "region": "서울"
 }
 
 ### payment with illegal content-type
@@ -20,12 +20,12 @@ POST http://localhost:8080/payment
 Content-Type: text/html
 
 {
-"paymentId": 123,
-"accountId": 651,
-"amount": 111,
-"methodType": "method",
-"itemCategory": "item",
-"region": "서울"
+  "paymentId": 123,
+  "accountId": 651,
+  "amount": 111,
+  "methodType": "method",
+  "itemCategory": "item",
+  "region": "서울"
 }
 
 ### payment with invalid account id
