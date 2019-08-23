@@ -2,11 +2,12 @@ package gh.shin.web.value;
 
 import gh.shin.entity.AccountEnt;
 import gh.shin.entity.PaymentEnt;
+import gh.shin.group.FilteringTarget;
 
 import java.io.Serializable;
 import java.util.Objects;
 
-public final class PaymentInfo implements Serializable {
+public final class PaymentInfo implements Serializable, FilteringTarget {
     private static final long serialVersionUID = -7722974456683772876L;
     private final Integer age;
     private final String region;
@@ -78,5 +79,11 @@ public final class PaymentInfo implements Serializable {
             ", itemCategory='" + itemCategory + '\'' +
             ", methodType='" + methodType + '\'' +
             '}';
+    }
+
+    @Override
+    public boolean isValid() {
+        return Objects.nonNull(age) && Objects.nonNull(region) && Objects.nonNull(residence) &&
+            Objects.nonNull(amount) && Objects.nonNull(itemCategory) && Objects.nonNull(methodType);
     }
 }

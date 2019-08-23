@@ -12,16 +12,17 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class GroupPolicyFactory {
+public class GroupPolicyFactory<T extends FilteringTarget> {
     private static final Logger log = LoggerFactory.getLogger(GroupPolicyFactory.class);
-    private final Set<GroupPolicy> policies = new HashSet<>();
+    private final Set<GroupPolicy<T>> policies = new HashSet<>();
 
-    public void addPolicies(GroupPolicy... policies) {
-        List<GroupPolicy> policyList = Lists.newArrayList(policies);
+    @SafeVarargs
+    public final void addPolicies(GroupPolicy<T>... policies) {
+        List<GroupPolicy<T>> policyList = Lists.newArrayList(policies);
 
-        Iterator<GroupPolicy> argPolicyItr = policyList.iterator();
+        Iterator<GroupPolicy<T>> argPolicyItr = policyList.iterator();
         while (argPolicyItr.hasNext()) {
-            GroupPolicy argPolicy = argPolicyItr.next();
+            GroupPolicy<T> argPolicy = argPolicyItr.next();
             if (argPolicy != null) {
                 boolean duplicated = false;
                 for (GroupPolicy policy : this.policies) {
@@ -39,9 +40,9 @@ public class GroupPolicyFactory {
         }
     }
 
-    public String getGroupIdByPaymentInfo(PaymentInfo paymentInfo) {
+    public String getGroupIdByPaymentInfo(T paymentInfo) {
         String groupId = "";
-        for (GroupPolicy policy : policies) {
+        for (GroupPolicy<T> policy : policies) {
             if (policy.filter(paymentInfo)) {
                 if (groupId.equals("")) {
                     groupId = policy.getGroupId();

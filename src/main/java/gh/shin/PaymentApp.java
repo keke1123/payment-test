@@ -105,16 +105,16 @@ public class PaymentApp {
      * @see Group
      */
     @Bean
-    GroupPolicyFactory groupPolicyFactory() {
-        GroupPolicy group1Policy = new GroupPolicy(GROUP_1, (f) -> f.getAmount() < 10000 && f.getMethodType().equals(CARD));
-        GroupPolicy group2Policy = new GroupPolicy(GROUP_2, (f) -> (f.getAge() >= 30 && f.getAge() <= 39)
+    GroupPolicyFactory<PaymentInfo> groupPolicyFactory() {
+        GroupPolicy<PaymentInfo> group1Policy = new GroupPolicy<>(GROUP_1, (f) -> f.getAmount() < 10000 && f.getMethodType().equals(CARD));
+        GroupPolicy<PaymentInfo> group2Policy = new GroupPolicy<>(GROUP_2, (f) -> (f.getAge() >= 30 && f.getAge() <= 39)
             && (f.getResidence().equals(SEOUL) || f.getResidence().equals(GYEONGGI)));
-        GroupPolicy group3Policy = new GroupPolicy(GROUP_3, (f) -> f.getItemCategory().equals(FASHION) && f.getRegion().equals(f.getResidence()));
-        GroupPolicy group4Policy = new GroupPolicy(GROUP_4, (f) ->
+        GroupPolicy<PaymentInfo> group3Policy = new GroupPolicy<>(GROUP_3, (f) -> f.getItemCategory().equals(FASHION) && f.getRegion().equals(f.getResidence()));
+        GroupPolicy<PaymentInfo> group4Policy = new GroupPolicy<>(GROUP_4, (f) ->
             (f.getAmount() >= 1100000 && f.getMethodType().equals(CARD))
                 || (f.getAmount() >= 1000000 && f.getMethodType().equals(CASH)));
 
-        GroupPolicyFactory groupPolicyFactory = new GroupPolicyFactory();
+        GroupPolicyFactory<PaymentInfo> groupPolicyFactory = new GroupPolicyFactory<>();
         groupPolicyFactory.addPolicies(group1Policy, group2Policy, group3Policy, group4Policy);
         return groupPolicyFactory;
     }

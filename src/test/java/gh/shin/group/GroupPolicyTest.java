@@ -8,19 +8,22 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
+import static gh.shin.Constants.Category.FASHION;
+import static gh.shin.Constants.Location.BUSAN;
+import static gh.shin.Constants.PaymentMethod.CARD;
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertFalse;
 
 @FixMethodOrder(value = MethodSorters.NAME_ASCENDING)
 public class GroupPolicyTest {
 
-    private static GroupFilter FILTER;
-    private static GroupPolicy POLICY;
+    private static GroupFilter<PaymentInfo> FILTER;
+    private static GroupPolicy<PaymentInfo> POLICY;
 
     @BeforeClass
     public static void set() {
         FILTER = (info) -> info.getAmount() == 100;
-        POLICY = new GroupPolicy("a", FILTER);
+        POLICY = new GroupPolicy<>("a", FILTER);
     }
 
     @Test(expected = RuntimeException.class)
@@ -32,33 +35,35 @@ public class GroupPolicyTest {
     }
 
     @Test
-    public void _02_filter_false() {
-        PaymentEnt ent = new PaymentEnt();
-        ent.setAccount(new AccountEnt());
-        ent.setAmount(0);
-        PaymentInfo info = new PaymentInfo(ent);
-        assertFalse(POLICY.filter(info));
-    }
-
-    @Test
     public void _02_filter_true() {
-        PaymentEnt ent = new PaymentEnt();
-        ent.setAccount(new AccountEnt());
-        ent.setAmount(100);
+        PaymentEnt ent = getPaymentEnt();
         PaymentInfo info = new PaymentInfo(ent);
         assertTrue(POLICY.filter(info));
     }
 
     @Test(expected = NullPointerException.class)
     public void _03_invalid_filter() {
-        GroupFilter filter = null;
-        new GroupPolicy("a", filter);
+        GroupFilter<PaymentInfo> filter = null;
+        new GroupPolicy<>("a", filter);
     }
 
     @Test(expected = NullPointerException.class)
-    public void _043_invalid_groupId() {
-        GroupFilter filter = null;
-        new GroupPolicy(null, filter);
+    public void _04_invalid_groupId() {
+        GroupFilter<PaymentInfo> filter = null;
+        new GroupPolicy<>(null, filter);
+    }
+
+    public static PaymentEnt getPaymentEnt(){
+        AccountEnt acc = new AccountEnt();
+        acc.setAge(34);
+        acc.setResidence(BUSAN);
+        PaymentEnt ent = new PaymentEnt();
+        ent.setAccount(acc);
+        ent.setItemCategory(FASHION);
+        ent.setMethodType(CARD);
+        ent.setAmount(100);
+        ent.setRegion(BUSAN);
+        return ent;
     }
 
 }

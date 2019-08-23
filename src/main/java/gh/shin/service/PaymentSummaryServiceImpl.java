@@ -19,10 +19,10 @@ import java.util.concurrent.Future;
 @Service
 public class PaymentSummaryServiceImpl implements PaymentSummaryService {
     private final PaymentSummaryRepo paymentSummaryRepo;
-    private final GroupPolicyFactory groupPolicyFactory;
+    private final GroupPolicyFactory<PaymentInfo> groupPolicyFactory;
 
     @Autowired
-    public PaymentSummaryServiceImpl(PaymentSummaryRepo paymentSummaryRepo, GroupPolicyFactory groupPolicyFactory) {
+    public PaymentSummaryServiceImpl(PaymentSummaryRepo paymentSummaryRepo, GroupPolicyFactory<PaymentInfo> groupPolicyFactory) {
         this.paymentSummaryRepo = paymentSummaryRepo;
         this.groupPolicyFactory = groupPolicyFactory;
     }

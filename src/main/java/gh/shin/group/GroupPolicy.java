@@ -1,14 +1,12 @@
 package gh.shin.group;
 
-import gh.shin.web.value.PaymentInfo;
-
 import java.util.Objects;
 
-public final class GroupPolicy {
+public final class GroupPolicy<T extends FilteringTarget> {
     private final String groupId;
-    private final GroupFilter filter;
+    private final GroupFilter<T> filter;
 
-    public GroupPolicy(String groupId, GroupFilter filter) {
+    public GroupPolicy(String groupId, GroupFilter<T> filter) {
         if (groupId == null || groupId.length() < 1) {
             throw new NullPointerException("Group Id must not be empty.");
         }
@@ -27,8 +25,12 @@ public final class GroupPolicy {
         return filter;
     }
 
-    boolean filter(PaymentInfo paymentInfo) {
-        return this.filter.filter(paymentInfo);
+    boolean filter(T target) {
+        if (target.isValid()) {
+            return this.filter.filter(target);
+        } else {
+            throw new RuntimeException("Filtering target is invalid. " + target.toString());
+        }
     }
 
     @Override
