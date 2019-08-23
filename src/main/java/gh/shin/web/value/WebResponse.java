@@ -20,7 +20,7 @@ public final class WebResponse implements Serializable {
 
     public static WebResponse error(String errorMessage) {
         if (errorMessage == null || errorMessage.length() < 1) {
-            throw new RuntimeException("Errror message is not allowed empty message!");
+            throw new RuntimeException("Error message is not allowed empty message!");
         }
         return new WebResponse(false, errorMessage);
     }
