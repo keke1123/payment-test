@@ -11,9 +11,6 @@ import gh.shin.service.PaymentService;
 import gh.shin.service.PaymentSummaryService;
 import gh.shin.util.CreationFailedException;
 import gh.shin.web.value.PaymentRequest;
-import org.hibernate.HibernateException;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,8 +22,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -151,10 +151,10 @@ public class PaymentSpringTest {
         assertNotNull(paymentSummaryService.findByGroupId(Group.GROUP_1));
     }
 
-    @Test(expected = HibernateException.class)
-    public void _2_PaymentSummary_03_save_id_null() {
+    @Test(expected = ExecutionException.class)
+    public void _2_PaymentSummary_03_save_id_null() throws InterruptedException, ExecutionException, TimeoutException {
         PaymentSummary summary = new PaymentSummary();
-        assertTrue(paymentSummaryService.save(summary).isPresent());
+        assertNotNull(paymentSummaryService.save(summary).get(1000, TimeUnit.MILLISECONDS));
     }
 
     @Test
@@ -168,10 +168,13 @@ public class PaymentSpringTest {
         summary.setMaxAmount(555);
         summary.setMinAmount(11);
         summary.setTotalAmount(6666666666L);
-        assertTrue(paymentSummaryService.save(summary).isPresent());
-        Thread.sleep(1000);
+        Future<PaymentSummary> newSum = paymentSummaryService.save(summary);
+        while (!newSum.isDone()) {
+            log.info("not saved yet.");
+            Thread.sleep(1000);
+        }
         PaymentSummary saved = paymentSummaryRepo.findById(Group.GROUP_1).orElse(null);
-        assertEquals(5555555, summary.getAvgAmount().intValue());
+        assertEquals(5555555, saved.getAvgAmount().intValue());
     }
 
     //TODO Controller teet
