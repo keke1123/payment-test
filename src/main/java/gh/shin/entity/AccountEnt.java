@@ -12,9 +12,10 @@ public class AccountEnt implements Serializable {
     private String residence;
     private Integer age;
 
-    public AccountEnt(){}
+    public AccountEnt() {
+    }
 
-    public  AccountEnt (Long accountId, String residence, Integer age) {
+    public AccountEnt(Long accountId, String residence, Integer age) {
         this.accountId = accountId;
         this.residence = residence;
         this.age = age;
