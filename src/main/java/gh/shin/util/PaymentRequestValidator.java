@@ -19,9 +19,9 @@ public class PaymentRequestValidator {
         if (request.getMethodType() == null || !request.getMethodType().equals(CARD) && !request.getMethodType().equals(CASH)) {
             return new ValidationResult(false, request.getMethodType() + " method type is invalid.");
         }
-        if(request.getItemCategory() == null || !request.getItemCategory().equals(FOODS) && !request.getItemCategory().equals(BEAUTY)
+        if (request.getItemCategory() == null || !request.getItemCategory().equals(FOODS) && !request.getItemCategory().equals(BEAUTY)
             && !request.getItemCategory().equals(SPORTS) && !request.getItemCategory().equals(BOOKS)
-            && !request.getItemCategory().equals(FASHION)){
+            && !request.getItemCategory().equals(FASHION)) {
             return new ValidationResult(false, request.getItemCategory() + " item category is invalid.");
         }
         if (request.getRegion() == null || !LOCATIONS.contains(request.getRegion())) {
