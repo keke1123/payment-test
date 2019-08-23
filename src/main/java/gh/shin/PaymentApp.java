@@ -38,6 +38,8 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -132,8 +134,8 @@ public class PaymentApp {
             EntityTransaction transaction = entityManager.getTransaction();
             try {
                 transaction.begin();
-                int accCount = _persistAccounts(new FileReader(accountResource.getFile()), entityManager);
-                List<PaymentEnt> payments = _persistPayments(new FileReader(paymentResource.getFile()), entityManager);
+                int accCount = _persistAccounts(new InputStreamReader(accountResource.getInputStream()), entityManager);
+                List<PaymentEnt> payments = _persistPayments(new InputStreamReader(paymentResource.getInputStream()), entityManager);
 
                 log.info("{} Accounts, {} Payment rows insert complete.", accCount, payments.size());
                 if (payments.size() > 0) {
@@ -178,7 +180,7 @@ public class PaymentApp {
      * @return persist 완료된 row count
      * @throws IOException - 일반적인 File I/O 관련
      */
-    private int _persistAccounts(FileReader fileReader, EntityManager entityManager) throws IOException {
+    private int _persistAccounts(Reader fileReader, EntityManager entityManager) throws IOException {
         int result = 0;
         Iterable<CSVRecord> accountRecords = _getCsvRecords(fileReader);
         for (CSVRecord record : accountRecords) {
@@ -200,7 +202,7 @@ public class PaymentApp {
      * @return persist 완료된 PaymentEnt list
      * @throws IOException - 일반적인 File I/O 관련
      */
-    private List<PaymentEnt> _persistPayments(FileReader fileReader, EntityManager entityManager) throws IOException {
+    private List<PaymentEnt> _persistPayments(Reader fileReader, EntityManager entityManager) throws IOException {
         Iterable<CSVRecord> paymentRecords = _getCsvRecords(fileReader);
         List<PaymentEnt> result = new ArrayList<>();
         for (CSVRecord record : paymentRecords) {
@@ -236,7 +238,7 @@ public class PaymentApp {
      * @return 파싱된 CSVRecord lines
      * @throws IOException - 일반적인 File I/O 관련
      */
-    private Iterable<CSVRecord> _getCsvRecords(FileReader fileReader) throws IOException {
+    private Iterable<CSVRecord> _getCsvRecords(Reader fileReader) throws IOException {
         return CSVFormat.DEFAULT.withFirstRecordAsHeader().withIgnoreEmptyLines()
             .withTrim().parse(fileReader);
     }
