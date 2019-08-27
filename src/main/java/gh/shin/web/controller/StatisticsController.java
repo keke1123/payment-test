@@ -1,6 +1,7 @@
 package gh.shin.web.controller;
 
 import gh.shin.entity.PaymentSummary;
+import gh.shin.service.PaymentSummaryService;
 import gh.shin.service.PaymentSummaryServiceImpl;
 import gh.shin.util.NoDataFoundException;
 import org.slf4j.Logger;
@@ -14,10 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class StatisticsController {
     private static final Logger log = LoggerFactory.getLogger(StatisticsController.class);
 
-    private final PaymentSummaryServiceImpl paymentSummaryService;
+    private final PaymentSummaryService paymentSummaryService;
 
     @Autowired
-    public StatisticsController(PaymentSummaryServiceImpl paymentSummaryService) {
+    public StatisticsController(PaymentSummaryService paymentSummaryService) {
         this.paymentSummaryService = paymentSummaryService;
     }
 

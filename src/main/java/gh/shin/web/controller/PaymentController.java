@@ -1,6 +1,6 @@
 package gh.shin.web.controller;
 
-import gh.shin.service.PaymentServiceImpl;
+import gh.shin.service.PaymentService;
 import gh.shin.web.value.PaymentRequest;
 import gh.shin.web.value.WebResponse;
 import org.slf4j.Logger;
@@ -15,17 +15,20 @@ import javax.validation.Valid;
 @RestController
 public class PaymentController {
     private static final Logger log = LoggerFactory.getLogger(PaymentController.class);
-    private final PaymentServiceImpl paymentService;
+    private final PaymentService paymentService;
 
     @Autowired
-    public PaymentController(PaymentServiceImpl paymentService) {
+    public PaymentController(PaymentService paymentService) {
         this.paymentService = paymentService;
     }
 
     @PostMapping(value = "/payment", consumes = "application/json", produces = "application/json")
     public WebResponse createPayment(@Valid @RequestBody PaymentRequest request) {
         log.info("request received: {}", request);
-        paymentService.create(request);
-        return WebResponse.success();
+        if (paymentService.create(request)) {
+            return WebResponse.success();
+        } else {
+            return WebResponse.error("Payment creation failed!");
+        }
     }
 }
