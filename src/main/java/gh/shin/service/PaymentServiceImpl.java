@@ -2,6 +2,7 @@ package gh.shin.service;
 
 import gh.shin.entity.AccountEnt;
 import gh.shin.entity.PaymentEnt;
+import gh.shin.entity.PaymentSummary;
 import gh.shin.entity.repo.AccountRepo;
 import gh.shin.entity.repo.PaymentRepo;
 import gh.shin.util.CreationFailedException;
@@ -50,7 +51,10 @@ public class PaymentServiceImpl implements PaymentService {
             paymentEnt.setMethodType(request.getMethodType());
             paymentEnt.setRegion(request.getRegion());
             paymentRepo.save(paymentEnt);
-            paymentSummaryService.calculateSummary(paymentEnt);
+            PaymentSummary summaryResult = paymentSummaryService.calculateSummary(paymentEnt);
+            if(summaryResult == null){
+                throw new NullPointerException();
+            }
             result = true;
         } else {
             throw new CreationFailedException(validationResult.getMsg());

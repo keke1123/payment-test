@@ -45,9 +45,13 @@ public class PaymentSummaryServiceImpl implements PaymentSummaryService {
         PaymentInfo paymentInfo = new PaymentInfo(paymentEnt);
         LocalDateTime now = LocalDateTime.now();
         String groupId = groupPolicyFactory.getGroupIdByPaymentInfo(paymentInfo);
-        PaymentSummary paymentSummary = PaymentSummaryUtil.calculate(paymentInfo, findByGroupId(groupId).orElse(new PaymentSummary(groupId, now)));
-        save(paymentSummary);
-        return paymentSummary;
+        if(groupId.length() > 0) {
+            PaymentSummary paymentSummary = PaymentSummaryUtil.calculate(paymentInfo, findByGroupId(groupId).orElse(new PaymentSummary(groupId, now)));
+            save(paymentSummary);
+            return paymentSummary;
+        }else{
+            return null;
+        }
     }
 
 }
